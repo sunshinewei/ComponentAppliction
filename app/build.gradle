@@ -1,0 +1,71 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'ryhui_key'
+            keyPassword '123456qwe'
+            storeFile file('D:/项目重要文件/ryhuidebug.keystore')
+            storePassword '123456qwe'
+        }
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.example.mm.componentappliction"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11"
+            }
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.config
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.config
+            minifyEnabled false
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    if (isModule.toBoolean()) {
+
+    } else {
+        implementation project(':shopcomponent')
+        implementation project(':infoapplication')
+    }
+    implementation project(':mylibrary')
+}
+repositories {
+    mavenCentral()
+}
