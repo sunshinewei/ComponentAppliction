@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
     private var mTvShop: TextView? = null
     private var tvInfodetail: TextView? = null
     private var tvShopdetail: TextView? = null
-
-
     fun initViews() {
         mTvInfo = findViewById<TextView>(R.id.tv_info)
         mTvShop = findViewById<TextView>(R.id.tv_shop)
@@ -41,17 +39,23 @@ class MainActivity : AppCompatActivity() {
 
         mTvShop?.setOnClickListener {
 
-
             //            Toast.makeText(this, "bbbbbbbbbbbbb", Toast.LENGTH_LONG).show()
             ARouter.getInstance().build("/shop/main", "shop").navigation()
         }
 
         tvInfodetail?.setOnClickListener {
 
+            ARouter.getInstance().build("/info/infodetail", "info")
+                    .withString("id", "111111111")
+                    .withString("name", "hello world")
+                    .navigation()
+
         }
 
-        tvShopdetail?.setOnClickListener {
-
+        tvShopdetail!!.setOnClickListener {
+            ARouter.getInstance()
+                    .build("/info/infodetail", "shop")
+                    .navigation()
         }
     }
 

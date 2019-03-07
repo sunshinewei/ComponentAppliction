@@ -1,0 +1,17 @@
+package com.example.shopcomponent;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+
+import com.alibaba.android.arouter.facade.annotation.Route;
+
+@Route(path = "/shop/shopdetail",group = "shop")
+public class ShopDetailActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shop_shopdetail);
+    }
+}
