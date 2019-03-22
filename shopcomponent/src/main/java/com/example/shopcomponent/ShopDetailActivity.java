@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.annotationlib.TestSelfAnnotation;
 
 @Route(path = "/shop/shopdetail",group = "shop")
 public class ShopDetailActivity extends AppCompatActivity {

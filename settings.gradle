@@ -1,1 +1,1 @@
-include ':app', ':shopcomponent', ':infoapplication', ':mylibrary'
+include ':app', ':shopcomponent', ':infoapplication', ':mylibrary', ':annotationLib', ':annotationProcessorlib'

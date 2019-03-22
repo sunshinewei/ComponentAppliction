@@ -2,16 +2,31 @@ package com.example.shopcomponent;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.annotationlib.TestSelfAnnotation;
+import com.example.mylibrary.HelpAnnotation;
 
-@Route(path = "/shop/main",group = "shop")
+@Route(path = "/shop/main", group = "shop")
 public class MainActivity extends AppCompatActivity {
+
+
+    @TestSelfAnnotation(R.id.tv_button)
+    TextView tv_button;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_main);
+
+        HelpAnnotation.inject(this);
+
+
+        tv_button.setText("aaaaaaaaaaaaaaaaaa");
     }
 }
 
