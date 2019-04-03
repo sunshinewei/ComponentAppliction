@@ -8,10 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 public class HelpAnnotation {
     private static final String RANDOM_SUFFIX = "$$BindView";
 
-    private HelpAnnotation() {
-
-    }
-
     /**
      * 通过反射的方式找到对应的辅助类，并调用对应的方法实现属性的注入
      *
@@ -22,9 +18,7 @@ public class HelpAnnotation {
             Class bindingClass = Class.forName(object.getClass().getCanonicalName() + RANDOM_SUFFIX);
             //noinspection unchecked
             Constructor constructor = bindingClass.getConstructor(object.getClass());
-
             constructor.newInstance(object);
-
 
         } catch (ClassNotFoundException e) {
             Log.e("TAG", "Meaningful Message", e);

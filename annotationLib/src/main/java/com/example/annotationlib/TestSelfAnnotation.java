@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface TestSelfAnnotation {
-
     int value() default 0;
 
 }

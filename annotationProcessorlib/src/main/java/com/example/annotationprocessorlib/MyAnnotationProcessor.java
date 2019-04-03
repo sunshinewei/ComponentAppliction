@@ -3,15 +3,17 @@ package com.example.annotationprocessorlib;
 import com.example.annotationlib.TestSelfAnnotation;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -26,14 +28,10 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import javax.tools.Diagnostic;
 
 //该注解是为了在编译时为该module生成声明文件
 @AutoService(Processor.class)
@@ -53,8 +51,6 @@ public class MyAnnotationProcessor extends AbstractProcessor {
 
     private Locale getLocale;
 
-    //PackageElement TypeElement VariableElement ExecutableElement
-
     /**
      * @param set
      * @param roundEnvironment
@@ -63,46 +59,77 @@ public class MyAnnotationProcessor extends AbstractProcessor {
     private static final String RANDOM_SUFFIX = "$$BindView";
 
 
+    private HashMap<String, HashMap<String, String>> entryKey = new HashMap<>();
+
+    private HashMap<String, Element> elementIndexMap = new HashMap<>();
+
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
 
         Set<? extends Element> elementsAnnotatedWith = roundEnvironment.getElementsAnnotatedWith(TestSelfAnnotation.class);
-
-        for (final Element element : elementsAnnotatedWith) {
-
+        for (final Element element : elementsAnnotatedWith)
             if (element.getKind() == ElementKind.FIELD) {
 
-                try {
+                TestSelfAnnotation annotation = element.getAnnotation(TestSelfAnnotation.class);
+                TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+                ClassName className = ClassName.get(enclosingElement);
 
-                    TestSelfAnnotation annotation = element.getAnnotation(TestSelfAnnotation.class);
-
-                    TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
-                    ClassName className = ClassName.get(enclosingElement);
-
-                    MethodSpec.Builder builder = MethodSpec.constructorBuilder()
-                            .addModifiers(Modifier.PUBLIC)
-                            .addParameter(className, "activity")
-                            .addCode("$N." + element.getSimpleName() + "=" + "$N." + "findViewById("
-                                    + annotation.value() + ");", "activity", "activity");
-
-                    TypeSpec build = TypeSpec.classBuilder(getClazzName(element) + RANDOM_SUFFIX)
-                            .addModifiers(Modifier.PUBLIC)
-                            .addMethod(builder.build())
-                            .build();
-
-                    JavaFile javaFile = JavaFile.builder(getPackageName(element), build).build();
-                    javaFile.writeTo(getFilers);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (entryKey.containsKey(className.simpleName())) {
+                    HashMap<String, String> stringStringHashMap = entryKey.get(className.simpleName());
+                    stringStringHashMap.put(element.getSimpleName().toString(), annotation.value() + "");
+//                    entryKey.put(element.getEnclosingElement().getSimpleName().toString(), stringStringHashMap);
+                } else {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put(element.getSimpleName().toString(), annotation.value() + "");
+                    elementIndexMap.put(className.simpleName(), element);
+                    entryKey.put(className.simpleName(), hashMap);
                 }
+            }
 
+        writeClazz(entryKey, elementIndexMap);
+        return false;
+    }
+
+
+    private void writeClazz(HashMap<String, HashMap<String, String>> entryKey, HashMap<String, Element> elementIndexMap) {
+
+        for (Map.Entry<String, HashMap<String, String>> map : entryKey.entrySet()) {
+
+            String key = map.getKey();
+
+            HashMap<String, String> value = map.getValue();
+
+            Element element = elementIndexMap.get(key);
+
+            TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+            ClassName className = ClassName.get(enclosingElement);
+            MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(className, "activity");
+            if (value.size() > 0) {
+                for (HashMap.Entry<String, String> entry : value.entrySet()) {
+                    CodeBlock of = CodeBlock.of("$N." + entry.getKey() + "=" + "$N." + "findViewById("
+                            + entry.getValue() + ");\n", "activity", "activity");
+
+                    builder.addCode(of);
+
+                }
+            }
+            TypeSpec build = TypeSpec.classBuilder(getClazzName(element) + RANDOM_SUFFIX)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addMethod(builder.build())
+                    .build();
+            try {
+                JavaFile javaFile = JavaFile.builder(getPackageName(element), build).build();
+                javaFile.writeTo(getFilers);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
 
         }
 
 
-        return false;
     }
 
 
@@ -136,12 +163,6 @@ public class MyAnnotationProcessor extends AbstractProcessor {
 
     }
 
-
-    @Override
-    public Set<String> getSupportedOptions() {
-        return super.getSupportedOptions();
-    }
-
     /**
      * @return
      */
@@ -149,10 +170,7 @@ public class MyAnnotationProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
 
         Set<String> setClazzName = new LinkedHashSet<>();
-
-        System.out.println("   " + TestSelfAnnotation.class.getCanonicalName());
         setClazzName.add(TestSelfAnnotation.class.getName());
-
         return setClazzName;
     }
 
@@ -164,7 +182,7 @@ public class MyAnnotationProcessor extends AbstractProcessor {
     public SourceVersion getSupportedSourceVersion() {
 //        return super.getSupportedSourceVersion();
 
-        return SourceVersion.RELEASE_7;
+        return SourceVersion.latestSupported();
     }
 
 }

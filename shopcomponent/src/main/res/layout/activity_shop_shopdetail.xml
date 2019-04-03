@@ -10,4 +10,10 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="welcome to shop module" />
+
+
+    <Button
+        android:id="@+id/bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
