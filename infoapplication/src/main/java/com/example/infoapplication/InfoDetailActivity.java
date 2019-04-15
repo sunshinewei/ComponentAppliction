@@ -34,7 +34,9 @@ public class InfoDetailActivity extends AppCompatActivity {
 
         ARouter.getInstance().inject(this);
 
-        initViews();
+        initViews();  //11*310
+
+        // 6  47
 
 
     }

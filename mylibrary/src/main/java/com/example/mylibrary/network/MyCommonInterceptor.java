@@ -17,11 +17,13 @@ public class MyCommonInterceptor implements Interceptor {
 
         Request request = chain.request();
 
-//        Request.Builder builder = request.newBuilder();
-//
-//        Request build = builder.build();
+        Request.Builder builder = request.newBuilder();
 
-        Response proceed = chain.proceed(request);
+        Request build = builder
+                .addHeader("aaa","ddd")
+                .build();
+
+        Response proceed = chain.proceed(build);
 
         Log.i(Constans.LOG_I_NET, "-----------------------------------------------------------");
         Log.i(Constans.LOG_I_NET, "request");

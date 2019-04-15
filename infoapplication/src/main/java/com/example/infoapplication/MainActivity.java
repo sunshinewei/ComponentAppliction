@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.infoapplication.databinding.ActivityInfoMainBinding;
 import com.example.infoapplication.entity.UserInfoEntity;
 import com.example.infoapplication.module.ViewMoulde_Main;
+import com.example.mylibrary.loadingdialog.view.LoadingDialog;
 
 @Route(path = "/info/main", group = "info")
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityInfoMainBinding activityInfoMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_info_main);
 
+
+        activityInfoMainBinding.setLifecycleOwner(this);
+
         MutableLiveData<UserInfoEntity> mainInfo = ViewModelProviders.of(this).get(ViewMoulde_Main.class).getMainInfo();
 
 //        activityInfoMainBinding.setInfoMain(mainInfo.getValue());
+
+
 
 
         mainInfo.observe(this, new Observer<UserInfoEntity>() {

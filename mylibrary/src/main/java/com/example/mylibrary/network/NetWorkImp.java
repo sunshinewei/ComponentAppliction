@@ -1,5 +1,8 @@
 package com.example.mylibrary.network;
 
+import com.example.mylibrary.network.listener.MyBaseObserver;
+import com.example.mylibrary.network.listener.OnNetListenerImp;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -9,20 +12,22 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 
-public class NetWorkImp implements NetWorkServices {
+public class NetWorkImp {
 
 
-    @Override
     public Call<List<BaseData>> listRepos(String user) {
         return null;
     }
 
-    @Override
-    public Observable<List<BaseData>> listRepo(String user) {
 
-        return this.listRepo("octocat")
+    public static Observable<List<BaseData>> listRepo(String user) {
+
+
+        BaseNetWork.newInstance().listRepo(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+
+        return null;
 
     }
 }

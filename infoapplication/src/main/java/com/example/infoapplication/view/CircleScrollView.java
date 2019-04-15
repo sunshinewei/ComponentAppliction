@@ -55,10 +55,7 @@ public class CircleScrollView extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
         measureChildren(widthMeasureSpec, heightMeasureSpec);
-
-
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int childWidth = 0;
@@ -66,7 +63,7 @@ public class CircleScrollView extends ViewGroup {
 
         for (int i = 0; i < getChildCount(); i++) {
 
-            Log.e("子布局",getChildCount()+"");
+            Log.e("子布局", getChildCount() + "");
             if (widthMode != MeasureSpec.UNSPECIFIED) {
                 childWidth = getChildAt(i).getMeasuredWidth();
             } else {

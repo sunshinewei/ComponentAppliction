@@ -15,7 +15,9 @@ public class MyBaseObserver<T> implements Observer<T> {
 
     @Override
     public void onSubscribe(Disposable d) {
-
+        if (mOnNetListener!=null){
+            mOnNetListener.onStart();
+        }
     }
 
     @Override

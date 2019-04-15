@@ -12,4 +12,7 @@ public interface OnNetListener<T> {
     void onError();
 
     void onComplete();
+
+
+    void onStart();
 }
