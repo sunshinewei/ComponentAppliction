@@ -44,7 +44,6 @@ dependencies {
     api 'com.alibaba:arouter-api:1.4.1'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
     annotationProcessor project(':annotationProcessorlib')
-
     //https://github.com/ReactiveX/RxAndroid
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'io.reactivex.rxjava2:rxjava:2.2.8'
@@ -55,6 +54,11 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:3.12.0'
     //
     api 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.android.databinding:library:3.2.0'
+
+    //
+    api 'android.arch.lifecycle:extensions:1.1.1'
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 }
 
 repositories {

@@ -2,63 +2,57 @@ package com.example.infoapplication.module;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.util.Log;
 
 
 import com.example.infoapplication.entity.UserInfoEntity;
 import com.example.mylibrary.loadingdialog.view.LoadingDialog;
-import com.example.mylibrary.network.BaseData;
-import com.example.mylibrary.network.BaseNetWork;
 import com.example.mylibrary.network.NetWorkImp;
 import com.example.mylibrary.network.listener.MyBaseObserver;
-import com.example.mylibrary.network.listener.OnNetListenerImp;
 
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ViewMoulde_Main extends ViewModel {
 
     MutableLiveData mutableLiveData = new MutableLiveData();
 
-    public MutableLiveData<UserInfoEntity> getMainInfo() {
+    public MutableLiveData<UserInfoEntity> getMainInfo(Context context) {
 
-        return getUserRxJava2Info();
+        return getUserRxJava2Info(context);
     }
 
-    public MutableLiveData<UserInfoEntity> getUserRxJava2Info() {
+    //pos
+    LoadingDialog loadingDialog;
 
-
+    public MutableLiveData<UserInfoEntity> getUserRxJava2Info(Context context) {
         NetWorkImp.listRepo("octocat")
-                .subscribe(new MyBaseObserver<>(new OnNetListenerImp<List<BaseData>>() {
-
-                    @Override
-                    public void onSuccess(List<BaseData> baseData) {
-                        UserInfoEntity userInfoEntity = new UserInfoEntity();
-                        userInfoEntity.setSex(baseData.size() + "");
-                        userInfoEntity.setUserName(baseData.toString());
-                        mutableLiveData.setValue(userInfoEntity);
-                    }
-
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                    }
-                }));
-
-
-//        BaseNetWork.newInstance().listRepo("octocat")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new MyBaseObserver<>(new OnNetListenerImp<List<BaseData>>() {
-//                    @Override
-//                    public void onSuccess(List<BaseData> baseData) {
-//                        UserInfoEntity userInfoEntity = new UserInfoEntity();
-//                        userInfoEntity.setSex(baseData.size() + "");
-//                        userInfoEntity.setUserName(baseData.toString());
-//                        mutableLiveData.setValue(userInfoEntity);
-//                    }
-//                }));
+                .subscribe(new MyBaseObserver<>(
+                                () -> {
+                                    loadingDialog = new LoadingDialog(context)
+                                            .setLoadingText("加载中");
+                                    loadingDialog.show();
+                                },
+                                baseData -> {
+                                    UserInfoEntity userInfoEntity = new UserInfoEntity();
+                                    userInfoEntity.setSex(baseData.size() + "");
+                                    userInfoEntity.setUserName(baseData.toString());
+                                    mutableLiveData.setValue(userInfoEntity);
+                                    loadingDialog
+                                            .loadSuccess();
+                                },
+                                msg -> {
+                                    Log.e("错误信息", msg);
+                                    loadingDialog.setLoadingText(msg)
+                                            .loadFailed();
+                                }
+                        )
+                );
         return mutableLiveData;
     }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+    }
+
 }

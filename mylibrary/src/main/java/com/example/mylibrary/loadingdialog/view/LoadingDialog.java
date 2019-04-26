@@ -41,9 +41,9 @@ public class LoadingDialog implements FinishDrawListener {
     private boolean openSuccessAnim = true;
     private boolean openFailedAnim = true;
     private int speed = 1;
-    private long time = 1000;
+    private long time = 10;
 
-    private static StyleManager s = new StyleManager(true, 0, Speed.SPEED_TWO, -1, -1, 1000L,
+    private static StyleManager s = new StyleManager(true, 0, Speed.SPEED_TWO, -1, -1, 10L,
             true, "加载中...", "加载成功", "加载失败");
 
     public enum Speed {
@@ -113,8 +113,10 @@ public class LoadingDialog implements FinishDrawListener {
         }
     }
 
+
     private void setParams(int size) {
         if (size < 0) return;
+
         ViewGroup.LayoutParams successParams = mSuccessView.getLayoutParams();
         successParams.height = size;
         successParams.width = size;
@@ -253,7 +255,7 @@ public class LoadingDialog implements FinishDrawListener {
     }
 
 
-        public void loadNetFailed() {
+    public void loadNetFailed() {
         mLoadingView.stopAnim();
         hideAll();
         mFailedView.setDrawDynamic(openFailedAnim);

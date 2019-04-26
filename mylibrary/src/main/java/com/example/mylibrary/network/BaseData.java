@@ -2,7 +2,7 @@ package com.example.mylibrary.network;
 
 import com.google.gson.annotations.SerializedName;
 
-public class BaseData {
+public class BaseData extends ResultEntity<BaseData.OwnerBean> {
 
 
     /**

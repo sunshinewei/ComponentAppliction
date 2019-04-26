@@ -113,7 +113,7 @@ public class WrongDiaView extends View {
 
     private void drawDynamic(Canvas canvas) {
         if (progress < 100) {
-            progress += speed;
+            progress += 5;
         }
         //根据进度画圆弧
         canvas.drawArc(rectF, 235, 360 * progress / 100, false, mPaint);

@@ -36,6 +36,9 @@ public class MyCommonInterceptor implements Interceptor {
         Log.i(Constans.LOG_I_NET, proceed.protocol().toString());
         Log.i(Constans.LOG_I_NET, proceed.message());
         Log.i(Constans.LOG_I_NET, "-----------------------------------------------------------");
+
+
+
         return proceed;
     }
 }

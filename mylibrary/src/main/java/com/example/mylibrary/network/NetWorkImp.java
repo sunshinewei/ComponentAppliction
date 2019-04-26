@@ -1,33 +1,34 @@
 package com.example.mylibrary.network;
 
-import com.example.mylibrary.network.listener.MyBaseObserver;
-import com.example.mylibrary.network.listener.OnNetListenerImp;
+import android.annotation.SuppressLint;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
 
 public class NetWorkImp {
 
 
-    public Call<List<BaseData>> listRepos(String user) {
-        return null;
-    }
-
-
+    @SuppressLint("CheckResult")
     public static Observable<List<BaseData>> listRepo(String user) {
 
+        return BaseNetWork.newInstance().listRepo(user)
+                .compose(new BaseObservableTransformer<>());
 
-        BaseNetWork.newInstance().listRepo(user)
-                .subscribeOn(Schedulers.io())
+    }
+}
+
+
+class BaseObservableTransformer<T> implements ObservableTransformer<T, T> {
+
+    @Override
+    public ObservableSource<T> apply(Observable<T> upstream) {
+        return upstream.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-
-        return null;
-
     }
 }
