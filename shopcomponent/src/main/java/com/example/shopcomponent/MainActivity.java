@@ -19,12 +19,12 @@ import java.lang.annotation.Documented;
 public class MainActivity extends AppCompatActivity {
 
 
-    @TestSelfAnnotation(R.id.tv_button)
-    TextView tv_button;
-
-
-    @TestSelfAnnotation(R.id.bt_ok)
-    Button bt_button;
+//    @TestSelfAnnotation(R.id.tv_button)
+//    TextView tv_button;
+//
+//
+//    @TestSelfAnnotation(R.id.bt_ok)
+//    Button bt_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

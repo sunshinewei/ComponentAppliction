@@ -21,7 +21,7 @@ public class ViewMoulde_Main extends ViewModel {
         return getUserRxJava2Info(context);
     }
 
-    //pos
+    //pos zb vsys
     LoadingDialog loadingDialog;
 
     public MutableLiveData<UserInfoEntity> getUserRxJava2Info(Context context) {

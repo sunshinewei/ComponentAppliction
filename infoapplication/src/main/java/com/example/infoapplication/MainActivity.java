@@ -32,13 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         mainInfo = ViewModelProviders.of(this).get(ViewMoulde_Main.class).getMainInfo(this);
 
-        mainInfo.observe(this, new Observer<UserInfoEntity>() {
-            @Override
-            public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
-
-                activityInfoMainBinding.setInfoMain(mainInfo.getValue());
-            }
-        });
+        mainInfo.observe(this, userInfoEntity -> activityInfoMainBinding.setInfoMain(mainInfo.getValue()));
 
     }
 

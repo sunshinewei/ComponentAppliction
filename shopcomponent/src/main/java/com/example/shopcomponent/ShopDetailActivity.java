@@ -12,11 +12,11 @@ import com.example.annotationlib.TestSelfAnnotation;
 @Route(path = "/shop/shopdetail", group = "shop")
 public class ShopDetailActivity extends AppCompatActivity {
 
-
-    @TestSelfAnnotation(R.id.tv_shop_content)
-    TextView tvShopContent;
-    @TestSelfAnnotation(R.id.bottom)
-    Button bottom;
+//
+//    @TestSelfAnnotation(R.id.tv_shop_content)
+//    TextView tvShopContent;
+//    @TestSelfAnnotation(R.id.bottom)
+//    Button bottom;
 
 
     @Override

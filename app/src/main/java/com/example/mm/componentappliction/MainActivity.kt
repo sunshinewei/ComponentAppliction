@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
 
             //            Toast.makeText(this, "aaaaaaaaaaaa", Toast.LENGTH_LONG).show()
 
-            ARouter.getInstance().build("/info/main", "info").navigation()
+            ARouter.getInstance().
+                    build("/info/main", "info").navigation()
         }
 
         mTvShop?.setOnClickListener {
